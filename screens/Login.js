@@ -33,17 +33,27 @@ import{
 } from './../components/styles'
 import {Keyboard, View} from 'react-native';
 
+import { Firebase, auth} from '../config/firebase'
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import HomeStack from '../navigators/HomeStack';
+
+import {logIn} from '../components/auth';
 // Colors
 const{brand, darkLight, primary} = Colors;
 
 // keyboard avoiding view
 import KeyboardAvoidingwrapper from '../components/KeyboardAvoidingwrapper';
-import ArrowStack from '../navigators/RootStack';
 
 
-const Login = ({navigation}) => {
+
+const Login = ({ navigation }) => {
     const {hidePassword, setHidePassword} = useState(true);
+    const [loginError, setLoginError] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
+    
+    
     return(
         <KeyboardAvoidingwrapper>
             
@@ -56,8 +66,10 @@ const Login = ({navigation}) => {
                 <Formik
                     initialValues={{email: '', password: ''}}
                     onSubmit={(values) => {
-                        console.log(values)
-                        navigation.navigate("Welcome");
+                        console.log(values);
+                        signInWithEmailAndPassword(auth, values.email, values.password);
+                        navigation.navigate('Home');
+                        
                     }}
                 >{({handleChange, handleBlur, handleSubmit, values}) => (<StyledFormArea>
                     <MyTextInput 

@@ -2,10 +2,10 @@
 import { registerRootComponent } from 'expo';
 import React from 'react';
 import { View } from 'react-native';
-import ArrowStack from './navigators/RootStack'
+import Routes from './navigators';
 
 export default function App() {
-    return <ArrowStack />;
+    return <Routes/>;
   
 }
 

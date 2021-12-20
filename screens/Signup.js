@@ -31,6 +31,11 @@ import{
 } from './../components/styles'
 import {View, TouchableOpacity} from 'react-native';
 
+import {Firebase, auth} from '../config/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+
+import {signUp} from '../components/auth';
+
 // Colors
 const{brand, darkLight, primary} = Colors;
 
@@ -42,10 +47,18 @@ import KeyboardAvoidingwrapper from '../components/KeyboardAvoidingwrapper';
 import { NavigationContainer } from '@react-navigation/native';
 
 
+
+
+
+
 const Signup = ({navigation}) => {
     const [hidePassword, setHidePassword] = useState(true);
     const [show, setShow] = useState(false);
     const [date, setDate] = useState(new Date(2000, 0, 1));
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [signupError, setSignupError] = useState('');
+
 
 
     // Actual Date of Birth to be sent
@@ -85,7 +98,9 @@ const Signup = ({navigation}) => {
                     initialValues={{ fullName:'',  email: '', dateOfBirth: '', password: '', confirmPassword:''}}
                     onSubmit={(values) => {
                         console.log(values);
-                        navigation.navigate("Welcome");
+                        createUserWithEmailAndPassword(auth, values.email, values.password);
+                        
+                        navigation.navigate("Home");
                     }}
                 >{({handleChange, handleBlur, handleSubmit, values}) => (<StyledFormArea>
                     <MyTextInput 

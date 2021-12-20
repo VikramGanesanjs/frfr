@@ -1,68 +1,46 @@
-// import react navigation
+import React, { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-// import screens
-import Login from '../screens/Login';
-import Signup from '../screens/Signup';
-import Welcome from '../screens/Welcome';
-import AccountScreen from '../screens/AccountScreen';
-import NewsScreen from '../screens/NewsScreen';
-import SearchScreen from '../screens/SearchScreen';
-import TrendingScreen from '../screens/TrendingScreen';
-import TabBarComponent from '../components/TabBarComponent';
+import { View, ActivityIndicator } from 'react-native';
 
 
 
-// Colors
-import {Colors} from '../components/styles';
-const{brand, darkLight, primary, tertiary } = Colors;
+import { AuthenticatedUserContext } from './AuthenticatedUserProvider';
+import AuthStack from './AuthStack';
+import HomeStack from './HomeStack';
 
-import React, {useState} from 'react';
-
-const Stack = createNativeStackNavigator();
+import {Firebase, auth} from '../config/firebase';
 
 
-
-    
-
-const ArrowStack = () => {
-    return(
-        
-        <NavigationContainer>
-                <Stack.Navigator
-                    timingConfig={{
-                        duration: 0,
-                    }}
-                    screenOptions={{
-                        animation: 'none',
-                        headerShown: true,
-                        headerStyled: {
-                            backgroundColor: 'transparent',
-                            elevation: 0
-                        },
-                        headerShadowVisible: false,
-                        headerTransparent: true,
-                        headerTitle: '',
-                        headerLeftContainerStyle:{
-                            paddingLeft:20
-                        }
-
-
-                    }}
-                    initialRouteName="Login"
-                >
-                    <Stack.Screen name="Login" component={Login}  />
-                    <Stack.Screen name="Signup" component={Signup} />
-                    <Stack.Screen name="Welcome" component={Welcome}  />
-                    <Stack.Screen name="Account" component={AccountScreen} />
-                    <Stack.Screen name="Search" component={SearchScreen} />
-                    <Stack.Screen name="Trending" component={TrendingScreen} />
-                    <Stack.Screen name="News" component={NewsScreen} />
-                </Stack.Navigator>
-        </NavigationContainer>
+export default function RootNavigator() {
+    const { user, setUser } = useContext(AuthenticatedUserContext);
+    const [isLoading, setIsLoading] = useState(true);
+  
+    useEffect(() => {
+      // onAuthStateChanged returns an unsubscriber
+      const unsubscribeAuth = auth.onAuthStateChanged(async authenticatedUser => {
+        try {
+          await (authenticatedUser ? setUser(authenticatedUser) : setUser(null));
+          setIsLoading(false);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  
+      // unsubscribe auth listener on unmount
+      return unsubscribeAuth;
+    }, []);
+  
+    if (isLoading) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size='large' />
+        </View>
+      );
+    }
+  
+    return (
+      <NavigationContainer>
+        {user ? <HomeStack /> : <AuthStack />}
+      </NavigationContainer>
     );
-}
-
-
-export default ArrowStack;
+  }
