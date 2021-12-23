@@ -123,6 +123,14 @@ const Signup = ({navigation}) => {
                         if(validateFields(values)){
                             console.log(values);
                             createUserWithEmailAndPassword(auth, values.email, values.password);
+                            setTimeout(() => {
+                                setDoc(doc(db, "Users", auth.currentUser.uid), {
+                                    fullName: values.fullName,
+                                    emailAddress: values.email,
+                                    userIdentificationNumber: auth.currentUser.uid,
+                                  });
+                            }, 4000)
+                            
                             navigation.navigate("Home")
                         }
                         
