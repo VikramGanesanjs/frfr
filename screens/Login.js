@@ -53,7 +53,16 @@ const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    let asdf = true;
+
+    const signIn = (auth, email, password) => {
+        
+        try{
+            signInWithEmailAndPassword(auth, email, password)
+        }catch(error){
+            setLoginError("Username and password do not match");
+        }
+    }
+    
 
     const validateFields = (values) => {
         if(values.password === '' || values.email === ''){
@@ -85,26 +94,21 @@ const Login = ({ navigation }) => {
 
                 <Formik
                     initialValues={{email: '', password: ''}}
-                    onSubmit={(values) => {
+                    onSubmit={async (values) => {
                         if(validateFields(values)){
                             console.log(values);
-                            
-                            signInWithEmailAndPassword(auth, values.email, values.password).catch((error) => {
-                                setLoginError("Username and password do not match, try again");
+                            await signInWithEmailAndPassword(auth, values.email, values.password).catch(() => {
+                                setLoginError("Username and password do not match")
                             })
                             
-                            if(auth.currentUser !== null){
+                            const user = auth.currentUser;
+                            if(user){
                                 navigation.navigate("Home");
                             }
 
-
                             
-
-                            
-                        }
-                        
-                        
-                    }}
+                          
+                    }}}
                 >{({handleChange, handleBlur, handleSubmit, values}) => (<StyledFormArea>
                     <MyTextInput 
                         label="Email Address"
