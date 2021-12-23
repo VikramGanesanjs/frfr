@@ -165,25 +165,29 @@ export const Line = styled.View`
 
 export const ExtraView = styled.View`
     justify-content: center;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     padding: 10px;
+    padding-bottom: 20px;
 `;
 
 export const ExtraText = styled.Text`
     justify-content: center;
     align-content: center;
+    padding: 10px;
     color: ${tertiary};
     font-size: 15px;
 `;
 
 export const TextLink = styled.TouchableOpacity`
     justify-content: center;
+    padding: 10px;
     align-items: center;
 `;
 
 export const TextLinkContent = styled.Text`
     color: ${brand};
+    padding: 10px;
     font-size: 15px;
 `;
 
@@ -223,3 +227,10 @@ export const ScreenContainer = styled.View`
     padding-bottom: 700px;
     position: absolute;
     `;
+
+export const ErrorLabel = styled.Text`
+justify-content: center;
+align-content: center;
+color: ${red};
+font-size: 15px;
+`

@@ -27,6 +27,8 @@ import News from '../tabBarIcons/News';
 import Account from '../tabBarIcons/Account';
 import Trending from '../tabBarIcons/Trending';
 import Search from '../tabBarIcons/Search';
+import { auth } from '../config/firebase';
+import { signOut } from 'firebase/auth';
 
 // Colors
 const{brand, darkLight, primary} = Colors;
@@ -52,7 +54,13 @@ const Welcome = ({ navigation }) => {
                         
                         <Line />
                         <StyledButton onPress={() => {
-                            navigation.navigate("Login");
+                            
+                            signOut(auth).then(() =>{
+                                navigation.navigate("Login");
+                            }).catch((error) => {
+                                console.log(error);
+                            })
+                            console.log(auth.currentUser);
                             }}>
                             <ButtonText>
                                 Logout

@@ -29,7 +29,8 @@ import{
     ExtraView,
     ExtraText,
     TextLink,
-    TextLinkContent
+    TextLinkContent,
+    ErrorLabel
 } from './../components/styles'
 import {Keyboard, View} from 'react-native';
 
@@ -37,7 +38,7 @@ import { Firebase, auth} from '../config/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import HomeStack from '../navigators/HomeStack';
 
-import {logIn} from '../components/auth';
+
 // Colors
 const{brand, darkLight, primary} = Colors;
 
@@ -47,11 +48,30 @@ import KeyboardAvoidingwrapper from '../components/KeyboardAvoidingwrapper';
 
 
 const Login = ({ navigation }) => {
-    const {hidePassword, setHidePassword} = useState(true);
-    const [loginError, setLoginError] = useState('');
+    const [hidePassword, setHidePassword] = useState(true);
+    const [loginError, setLoginError] = useState('No errors currently');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    let asdf = true;
+
+    const validateFields = (values) => {
+        if(values.password === '' || values.email === ''){
+            setLoginError("Some fields are incomplete");
+            return false;
+        }
+        else if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)))
+        {
+          setLoginError("email address invalid.");
+          return false;
+        }
+
+        else{
+            return true;
+        }
+        
+    }
+    
     
     
     return(
@@ -60,15 +80,29 @@ const Login = ({ navigation }) => {
             <StyledContainer>
             <StatusBar style="dark"/>
             <InnerContainer>
-                <PageTitle>Flower Crib</PageTitle>
+                <PageTitle>Remindr</PageTitle>
                 <SubTitle>Account Login</SubTitle>
 
                 <Formik
                     initialValues={{email: '', password: ''}}
                     onSubmit={(values) => {
-                        console.log(values);
-                        signInWithEmailAndPassword(auth, values.email, values.password);
-                        navigation.navigate('Home');
+                        if(validateFields(values)){
+                            console.log(values);
+                            
+                            signInWithEmailAndPassword(auth, values.email, values.password).catch((error) => {
+                                setLoginError("Username and password do not match, try again");
+                            })
+                            
+                            if(auth.currentUser !== null){
+                                navigation.navigate("Home");
+                            }
+
+
+                            
+
+                            
+                        }
+                        
                         
                     }}
                 >{({handleChange, handleBlur, handleSubmit, values}) => (<StyledFormArea>
@@ -118,6 +152,9 @@ const Login = ({ navigation }) => {
                             }}>
                             <TextLinkContent>Signup</TextLinkContent>
                         </TextLink>
+                        <ErrorLabel>
+                            {loginError}
+                        </ErrorLabel>
                     </ExtraView>
                 </StyledFormArea>)}
                     

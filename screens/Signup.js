@@ -27,14 +27,16 @@ import{
     ExtraView,
     ExtraText,
     TextLink,
-    TextLinkContent
+    TextLinkContent,
+    ErrorLabel
 } from './../components/styles'
 import {View, TouchableOpacity} from 'react-native';
 
-import {Firebase, auth} from '../config/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {Firebase, auth, db} from '../config/firebase';
+import {setDoc, doc} from 'firebase/firestore';
 
-import {signUp} from '../components/auth';
+
+
 
 // Colors
 const{brand, darkLight, primary} = Colors;
@@ -45,6 +47,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 // Keyboard avoiding view
 import KeyboardAvoidingwrapper from '../components/KeyboardAvoidingwrapper';
 import { NavigationContainer } from '@react-navigation/native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
 
@@ -57,7 +60,7 @@ const Signup = ({navigation}) => {
     const [date, setDate] = useState(new Date(2000, 0, 1));
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [signupError, setSignupError] = useState('');
+    const [signupError, setSignupError] = useState('No errors right now');
 
 
 
@@ -71,6 +74,26 @@ const Signup = ({navigation}) => {
         setDob(currentDate);
     }
 
+    const validateFields = (values) => {
+        if(values.password === '' || values.email === '' || values.confirmPassword === '' || values.fullName === ''){
+            setSignupError("Some fields are incomplete");
+            return false;
+        }
+        else if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)))
+        {
+          setSignupError("email address invalid.");
+          return false;
+        }
+        else if(values.password !== values.confirmPassword){
+            setSignupError("Passwords do not match");
+            return false;
+        }
+        else{
+            return true;
+        }
+        
+    }
+
     const showDatePicker = () => {
         setShow(Platform.OS === 'ios');
     }
@@ -80,7 +103,7 @@ const Signup = ({navigation}) => {
         <StyledContainer>
             <StatusBar style="dark"/>
             <InnerContainer>
-                <PageTitle>Flower Crib</PageTitle>
+                <PageTitle>Remindr</PageTitle>
                 <SubTitle>Account Signup</SubTitle>
                 
                 {show && (
@@ -97,10 +120,12 @@ const Signup = ({navigation}) => {
                 <Formik
                     initialValues={{ fullName:'',  email: '', dateOfBirth: '', password: '', confirmPassword:''}}
                     onSubmit={(values) => {
-                        console.log(values);
-                        createUserWithEmailAndPassword(auth, values.email, values.password);
+                        if(validateFields(values)){
+                            console.log(values);
+                            createUserWithEmailAndPassword(auth, values.email, values.password);
+                            navigation.navigate("Home")
+                        }
                         
-                        navigation.navigate("Home");
                     }}
                 >{({handleChange, handleBlur, handleSubmit, values}) => (<StyledFormArea>
                     <MyTextInput 
@@ -182,6 +207,12 @@ const Signup = ({navigation}) => {
                             }}>
                             <TextLinkContent>Login</TextLinkContent>
                         </TextLink>
+                        
+                    </ExtraView>
+                    <ExtraView>
+                    <ErrorLabel>
+                            {signupError}
+                        </ErrorLabel>
                     </ExtraView>
                 </StyledFormArea>)}
                     
