@@ -35,8 +35,8 @@ import{
 } from './../components/styles'
 import {Keyboard, View} from 'react-native';
 
-import { Firebase, auth} from '../config/firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Firebase, auth, provider} from '../config/firebase'
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import HomeStack from '../navigators/HomeStack';
 
 
@@ -79,9 +79,33 @@ const Login = ({ navigation }) => {
         else{
             return true;
         }
+
+
         
     }
     
+
+    const googleSignIn = async () => {
+        await signInWithPopup(auth, provider)
+        .then((result) => {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          // ...
+        }).catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setLoginError(errorMessage);
+          // The email of the user's account used.
+          const email = error.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+        });
+    }
     
     
     return(
@@ -131,14 +155,14 @@ const Login = ({ navigation }) => {
                         hidePassword={hidePassword}
                         setHidePassword={setHidePassword}
                     />
-                    <MsgBox>...</MsgBox>
+                    
                     <StyledButton onPress={handleSubmit}>
                         <ButtonText>
                             Login
                         </ButtonText>
                     </StyledButton>
                     <Line />
-                    <StyledButton google={true} onPress={handleSubmit}>
+                    <StyledButton google={true} onPress={googleSignIn}>
                         <Fontisto name="google" color={white} size={25} />
                         <ButtonText google={true}> 
                             Sign in with Google
