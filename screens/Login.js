@@ -30,7 +30,8 @@ import{
     ExtraText,
     TextLink,
     TextLinkContent,
-    ErrorLabel
+    ErrorLabel,
+    ErrorContainer
 } from './../components/styles'
 import {Keyboard, View} from 'react-native';
 
@@ -40,7 +41,7 @@ import HomeStack from '../navigators/HomeStack';
 
 
 // Colors
-const{brand, darkLight, primary} = Colors;
+const{brand, darkLight, white} = Colors;
 
 // keyboard avoiding view
 import KeyboardAvoidingwrapper from '../components/KeyboardAvoidingwrapper';
@@ -49,7 +50,7 @@ import KeyboardAvoidingwrapper from '../components/KeyboardAvoidingwrapper';
 
 const Login = ({ navigation }) => {
     const [hidePassword, setHidePassword] = useState(true);
-    const [loginError, setLoginError] = useState('No errors currently');
+    const [loginError, setLoginError] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -89,7 +90,7 @@ const Login = ({ navigation }) => {
             <StyledContainer>
             <StatusBar style="dark"/>
             <InnerContainer>
-                <PageTitle>Remindr</PageTitle>
+            <PageLogo source={require("../assets/RemindrLogo.png")} style={{resizeMode:"center"}}></PageLogo>
                 <SubTitle>Account Login</SubTitle>
 
                 <Formik
@@ -142,24 +143,20 @@ const Login = ({ navigation }) => {
                     </StyledButton>
                     <Line />
                     <StyledButton google={true} onPress={handleSubmit}>
-                        <Fontisto name="google" color={primary} size={25} />
+                        <Fontisto name="google" color={white} size={25} />
                         <ButtonText google={true}> 
                             Sign in with Google
                         </ButtonText>
                     </StyledButton>
                     <ExtraView>
-                        <ExtraText>
-                            Don't have an account already?
-                        </ExtraText>
                         <TextLink onPress={() => {
                             navigation.navigate("Signup");
                             }}>
-                            <TextLinkContent>Signup</TextLinkContent>
+                            <TextLinkContent>Don't have an account? Go to Signup</TextLinkContent>
                         </TextLink>
-                        <ErrorLabel>
-                            {loginError}
-                        </ErrorLabel>
-                    </ExtraView>
+                        </ExtraView>
+                        <ErrorDisplay signupError={loginError} />
+                   
                 </StyledFormArea>)}
                     
                 
@@ -188,6 +185,20 @@ const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword, ..
             )}
         </View>
     )
+}
+
+const ErrorDisplay = ({signupError}) => {
+    if(signupError === ''){
+        return null;
+    }
+    else{
+        return(
+        <ErrorContainer>
+            <ErrorLabel>
+                    {signupError}
+            </ErrorLabel>
+        </ErrorContainer>)
+    }
 }
 
 export default Login;

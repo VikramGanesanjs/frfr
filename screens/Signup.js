@@ -5,14 +5,14 @@ import { StatusBar } from 'expo-status-bar';
 import {Formik} from 'formik';
 
 //icons
-import {Octicons, Ionicons, Fontisto } from '@expo/vector-icons';
+import {Octicons, Ionicons } from '@expo/vector-icons';
 
 
 import{
     StyledContainer, 
     InnerContainer,
-    PageLogo,
     PageTitle,
+    PageLogo,
     SubTitle,
     StyledFormArea,
     LeftIcon,
@@ -28,11 +28,12 @@ import{
     ExtraText,
     TextLink,
     TextLinkContent,
-    ErrorLabel
-} from './../components/styles'
-import {View, TouchableOpacity} from 'react-native';
+    ErrorLabel,
+    ErrorContainer
+} from './../components/styles';
+import { View, Image } from 'react-native';
 
-import {Firebase, auth, db} from '../config/firebase';
+import {auth, db} from '../config/firebase';
 import {setDoc, doc} from 'firebase/firestore';
 
 
@@ -41,12 +42,9 @@ import {setDoc, doc} from 'firebase/firestore';
 // Colors
 const{brand, darkLight, primary} = Colors;
 
-//DateTimePicker
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 // Keyboard avoiding view
 import KeyboardAvoidingwrapper from '../components/KeyboardAvoidingwrapper';
-import { NavigationContainer } from '@react-navigation/native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
@@ -56,23 +54,12 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Signup = ({navigation}) => {
     const [hidePassword, setHidePassword] = useState(true);
-    const [show, setShow] = useState(false);
-    const [date, setDate] = useState(new Date(2000, 0, 1));
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [signupError, setSignupError] = useState('No errors right now');
+    const [signupError, setSignupError] = useState('');
+    const [errorColor, setErrorColor] = useState('');
 
 
 
-    // Actual Date of Birth to be sent
-    const [dob, setDob] = useState();
 
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShow(false);
-        setDate(currentDate);
-        setDob(currentDate);
-    }
 
     const validateFields = (values) => {
         if(values.password === '' || values.email === '' || values.confirmPassword === '' || values.fullName === ''){
@@ -94,28 +81,17 @@ const Signup = ({navigation}) => {
         
     }
 
-    const showDatePicker = () => {
-        setShow(Platform.OS === 'ios');
-    }
+
+
+
 
     return(
         <KeyboardAvoidingwrapper>
         <StyledContainer>
             <StatusBar style="dark"/>
             <InnerContainer>
-                <PageTitle>Remindr</PageTitle>
+                <PageLogo source={require("../assets/RemindrLogo.png")} style={{resizeMode:"center"}}></PageLogo>
                 <SubTitle>Account Signup</SubTitle>
-                
-                {show && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode='date'
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
-                />
-            )}
 
                 <Formik
                     initialValues={{ fullName:'',  email: '', dateOfBirth: '', password: '', confirmPassword:''}}
@@ -158,19 +134,6 @@ const Signup = ({navigation}) => {
                         keyboardType="email-address"
                     />
 
-                    <MyTextInput 
-                        label="Date of Birth"
-                        icon="calendar"
-                        placeholder="YYYY - MM - DD"
-                        placeholderTextColor={darkLight}
-                        onChangeText={handleChange('dateOfBirth')}
-                        onBlur={handleBlur('dateOfBirth')}
-                        value={dob ? dob.toDateString() : ''}
-                        isDate={true}
-                        editable={false}
-                        showDatePicker={showDatePicker}
-                        
-                    />
 
                     <MyTextInput 
                         label="Password"
@@ -207,21 +170,14 @@ const Signup = ({navigation}) => {
                     </StyledButton>
                     <Line />
                     <ExtraView>
-                        <ExtraText>
-                            Already have an account? 
-                        </ExtraText>
                         <TextLink onPress={() => {
                             navigation.navigate("Login");
                             }}>
-                            <TextLinkContent>Login</TextLinkContent>
+                            <TextLinkContent>Already have an account? Go to Login</TextLinkContent>
                         </TextLink>
                         
                     </ExtraView>
-                    <ExtraView>
-                    <ErrorLabel>
-                            {signupError}
-                        </ErrorLabel>
-                    </ExtraView>
+                    <ErrorDisplay signupError={signupError} />
                 </StyledFormArea>)}
                     
                 
@@ -235,20 +191,14 @@ const Signup = ({navigation}) => {
 
 }
 
-const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword, 
-    isDate, showDatePicker, ...props }) =>{
+const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword, ...props }) =>{
     return(
         <View>
             <LeftIcon>
                 <Octicons name={icon} size={30} color={brand} />
             </LeftIcon>
             <StyledInputLabel>{label}</StyledInputLabel>
-            {!isDate && <StyledTextInput {...props}/>}
-            {isDate && (
-                <TouchableOpacity onPress={showDatePicker}>
-                    <StyledTextInput {...props} />
-                </TouchableOpacity>
-            )}
+            {<StyledTextInput {...props}/>}
             {isPassword && (
                 <RightIcon onPress={() => setHidePassword(!hidePassword)}>
                     <Ionicons name={hidePassword ? 'md-eye-off' : 'md-eye'} size={30} color={darkLight}/>
@@ -256,6 +206,20 @@ const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword,
             )}
         </View>
     )
+}
+
+const ErrorDisplay = ({signupError}) => {
+    if(signupError === ''){
+        return null;
+    }
+    else{
+        return(
+        <ErrorContainer>
+            <ErrorLabel>
+                    {signupError}
+            </ErrorLabel>
+        </ErrorContainer>)
+    }
 }
 
 export default Signup;

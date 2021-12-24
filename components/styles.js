@@ -5,16 +5,17 @@ import Constants from 'expo-constants';
 const StatusBarHeight = Constants.statusBarHeight;
 
 export const Colors = {
-    primary: '#ffffff',
-    secondary: '#E5E7EB',
-    tertiary: '#1F2937',
+    primary: '#334155',
+    secondary: '#ffffff',
+    tertiary: '#A78BFA',
     darkLight: '#9CA3AF',
-    brand: '#6D28D9',
-    green: '#10B981',
+    brand: '#10B981',
+    green: '#0EA5E9',
     red: '#EF4444',
+    white: '#ffffff',
     black: '#000000'
 }
-const { primary, secondary, tertiary, darkLight, brand, green, red, black } = Colors;
+const { primary, secondary, tertiary, darkLight, brand, green, red, white, black } = Colors;
 
 export const StyledContainer = styled.View`
     flex: 1;
@@ -40,6 +41,7 @@ export const WelcomeContainer = styled.View`
     padding-top: 300px;
     padding-bottom: 300px;
     position: absolute;
+    background-color: ${primary}
 `;
 
 export const Avatar = styled.Image`
@@ -79,7 +81,7 @@ export const SubTitle = styled.Text`
     margin-bottom: 20px;
     letter-spacing: 1px;
     font-weight: bold;
-    color: ${tertiary};
+    color: ${white};
 
     ${(props) => props.welcome && `
         margin-bottom: 5px;
@@ -102,11 +104,11 @@ export const StyledTextInput = styled.TextInput`
     height: 60px;
     margin-vertical: 3px;
     margin-bottom: 10px;
-    color: ${tertiary}
+    color: ${black};
 `;
 
 export const StyledInputLabel = styled.Text`
-    color: ${tertiary};
+    color: ${white};
     font-size: 13px;
     text-align: left;
 `;
@@ -142,7 +144,7 @@ export const StyledButton = styled.TouchableOpacity`
 `;
 
 export const ButtonText = styled.Text`
-    color: ${primary};
+    color: ${white};
     font-size: 16px;
 
     ${(props) => props.google == true && `
@@ -165,28 +167,24 @@ export const Line = styled.View`
 
 export const ExtraView = styled.View`
     justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    padding: 10px;
-    padding-bottom: 20px;
+    height: 60px;
+    background-color: ${tertiary}
+    margin: 20px;
 `;
 
 export const ExtraText = styled.Text`
-    justify-content: center;
-    align-content: center;
-    padding: 10px;
-    color: ${tertiary};
+    color: ${white};
     font-size: 15px;
 `;
 
 export const TextLink = styled.TouchableOpacity`
-    justify-content: center;
     padding: 10px;
-    align-items: center;
 `;
 
 export const TextLinkContent = styled.Text`
-    color: ${brand};
+    color: ${white};
     padding: 10px;
     font-size: 15px;
 `;
@@ -229,8 +227,19 @@ export const ScreenContainer = styled.View`
     `;
 
 export const ErrorLabel = styled.Text`
-justify-content: center;
-align-content: center;
-color: ${red};
-font-size: 15px;
-`
+    justify-content: center;
+    align-content: center;
+    color: ${white};
+    font-size: 15px;
+`;
+
+export const ErrorContainer = styled.View`
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: ${red}
+    padding: 10px;
+    padding-top: 20px;
+    margin: 20px;
+    padding-bottom: 20px;
+`;

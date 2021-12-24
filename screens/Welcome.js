@@ -49,7 +49,8 @@ const Welcome = ({ navigation }) => {
         const docSnap = await getDoc(docRef);
         if (typeof docSnap !== undefined) {
             const fullName = (docSnap._document.data.value.mapValue.fields.fullName);
-            setName(`Welcome ${fullName.stringValue}!`);
+            const firstLastArray = fullName.stringValue.split(" "); 
+            setName(`Welcome ${firstLastArray[0]}!`);
         } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
@@ -69,8 +70,6 @@ const Welcome = ({ navigation }) => {
                 <WelcomeContainer>
 
                     <PageTitle welcome={true}>{name}</PageTitle>
-                    <SubTitle welcome={true}>Olga Simpson</SubTitle>
-                    <SubTitle welcome={true}>johndoe@email.com</SubTitle>
 
               
                     
@@ -79,10 +78,10 @@ const Welcome = ({ navigation }) => {
                         <Line />
                         <StyledButton onPress={() => {
                             
-                            signOut(auth).then(() =>{
-                                navigation.navigate("Login");
-                            }).catch((error) => {
+                            signOut(auth).catch((error) => {
                                 console.log(error);
+                            }).then(() =>{
+                                navigation.navigate("Login");
                             })
                             console.log(auth.currentUser);
                             }}>
