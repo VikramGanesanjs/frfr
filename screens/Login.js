@@ -102,10 +102,6 @@ const Login = ({ navigation }) => {
                                 setLoginError("Username and password do not match")
                             })
                             
-                            const user = auth.currentUser;
-                            if(user){
-                                navigation.navigate("Home");
-                            }
 
                             
                           

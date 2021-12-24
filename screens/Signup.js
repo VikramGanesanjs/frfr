@@ -107,7 +107,6 @@ const Signup = ({navigation}) => {
                                   });
                             }, 4000)
                             
-                            navigation.navigate("Home")
                         }
                         
                     }}

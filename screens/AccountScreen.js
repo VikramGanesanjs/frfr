@@ -28,52 +28,17 @@ import{
 
 const AccountScreen = ({navigation}) => {
     return(
-        <InnerContainer>
-            <ScreenContainer> 
-                <><View>
-                    <Text>
-                        Account Screen
-                    </Text>
+        
+            <WelcomeContainer> 
+                <InnerContainer>
+                <View>
+                    <SubTitle>
+                        Account
+                    </SubTitle>
                 </View>
-                <TabBarContainerScreen>
-                        <TabBar>
-                            <TabBarInnerContainer>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("News");
-
-                                } }>
-                                    <News />
-
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("Account");
-
-                                } }>
-                                    <Account />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("Welcome");
-
-                                } }>
-                                    <Home />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("Trending");
-
-                                } }>
-                                    <Trending />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("Search");
-
-                                } }>
-                                    <Search />
-                                </TouchableOpacity>
-                            </TabBarInnerContainer>
-                        </TabBar>
-                    </TabBarContainerScreen></>
-            </ScreenContainer>
-        </InnerContainer>
+                </InnerContainer>
+            </WelcomeContainer>
+       
     );
 
 }

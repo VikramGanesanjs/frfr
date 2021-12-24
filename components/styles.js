@@ -41,6 +41,7 @@ export const WelcomeContainer = styled.View`
     padding-top: 300px;
     padding-bottom: 300px;
     position: absolute;
+    height: 100%;
     background-color: ${primary}
 `;
 
@@ -139,6 +140,7 @@ export const StyledButton = styled.TouchableOpacity`
     ${(props) => props.google == true && `
         background-color: ${green};
         flex-direction: row;
+        padding-top: 0px;
         justify-content: center;
     `}
 `;
@@ -171,6 +173,7 @@ export const ExtraView = styled.View`
     align-items: center;
     height: 60px;
     background-color: ${tertiary}
+    border-radius: 15px;
     margin: 20px;
 `;
 
@@ -242,4 +245,5 @@ export const ErrorContainer = styled.View`
     padding-top: 20px;
     margin: 20px;
     padding-bottom: 20px;
+    border-radius: 15px;
 `;

@@ -41,7 +41,7 @@ const{brand, darkLight, primary} = Colors;
 
 const Welcome = ({ navigation }) => {
     
-    const [name, setName] = useState('Welcome Dude')
+    const [name, setName] = useState('')
 
     const retrieveName = async () => {
         
@@ -80,8 +80,6 @@ const Welcome = ({ navigation }) => {
                             
                             signOut(auth).catch((error) => {
                                 console.log(error);
-                            }).then(() =>{
-                                navigation.navigate("Login");
                             })
                             console.log(auth.currentUser);
                             }}>
@@ -92,43 +90,6 @@ const Welcome = ({ navigation }) => {
                     
                     
                     </StyledFormArea>
-                    <TabBarContainer>
-        <TabBar>
-            <TabBarInnerContainer>
-            <TouchableOpacity onPress={() => {
-                navigation.navigate("News");
-
-            }}>
-                <News/>
-
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-                navigation.navigate("Account");
-
-            }}>
-                <Account />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-                navigation.navigate("Welcome");
-
-            }}>
-                <Home />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-                navigation.navigate("Trending");
-
-            }}>
-                <Trending />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-                navigation.navigate("Search");
-
-            }}>
-                <Search />
-            </TouchableOpacity>
-            </TabBarInnerContainer>
-        </TabBar>
-    </TabBarContainer>
                 
 
                 

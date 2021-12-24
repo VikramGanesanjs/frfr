@@ -28,52 +28,15 @@ import{
 
 const TrendingScreen = ({navigation}) => {
     return(
-        <InnerContainer>
-            <ScreenContainer> 
-                <><View>
-                    <Text>
-                        Trending Screen
-                    </Text>
+        <WelcomeContainer> 
+                <InnerContainer>
+                <View>
+                    <SubTitle>
+                        Calendar
+                    </SubTitle>
                 </View>
-                <TabBarContainerScreen>
-                        <TabBar>
-                            <TabBarInnerContainer>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("News");
-
-                                } }>
-                                    <News />
-
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("Account");
-
-                                } }>
-                                    <Account />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("Welcome");
-
-                                } }>
-                                    <Home />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("Trending");
-
-                                } }>
-                                    <Trending />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.navigate("Search");
-
-                                } }>
-                                    <Search />
-                                </TouchableOpacity>
-                            </TabBarInnerContainer>
-                        </TabBar>
-                    </TabBarContainerScreen></>
-            </ScreenContainer>
-        </InnerContainer>
+                </InnerContainer>
+            </WelcomeContainer>
     
     );
 
