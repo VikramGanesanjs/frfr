@@ -35,8 +35,9 @@ import{
 } from './../components/styles'
 import {Keyboard, View} from 'react-native';
 
-import { Firebase, auth, provider} from '../config/firebase'
+import { Firebase, auth, provider, db} from '../config/firebase'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { doc, setDoc} from 'firebase/firestore';
 import HomeStack from '../navigators/HomeStack';
 
 
@@ -45,6 +46,7 @@ const{brand, darkLight, white} = Colors;
 
 // keyboard avoiding view
 import KeyboardAvoidingwrapper from '../components/KeyboardAvoidingwrapper';
+
 
 
 
@@ -93,6 +95,15 @@ const Login = ({ navigation }) => {
           const token = credential.accessToken;
           // The signed-in user info.
           const user = result.user;
+          const email = user.email;
+          const name = user.displayName;
+          const uid = user.uid
+
+          setDoc(doc(db, "Users", uid), {
+            fullName: name,
+            emailAddress: email,
+            userIdentificationNumber: uid,
+          });
           // ...
         }).catch((error) => {
           // Handle Errors here.
