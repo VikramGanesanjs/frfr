@@ -247,3 +247,11 @@ export const ErrorContainer = styled.View`
     padding-bottom: 20px;
     border-radius: 15px;
 `;
+
+export const CalendarContainer = styled.View`
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 70px;
+    background-color: ${primary};
+`;
