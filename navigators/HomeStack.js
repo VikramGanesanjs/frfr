@@ -50,7 +50,7 @@ export default function HomeStack({ navigation }) {
         tabBarLabel: ({ color }) => <TabBarLabel color={color} title='LIST' />,
         }}/>
       <Tab.Screen name='ADD' component={SearchScreen} options={{
-        tabBarButton: ({navigation}) => <CustomTabBarButton onPress={() => navigation.navigate('ADD')} /> 
+        tabBarButton: ({ props }) => <CustomTabBarButton {...props} /> 
       }}/>
       <Tab.Screen name='Calendar' component={TrendingScreen} options={{
         tabBarIcon: ({color}) => <Ionicons name='calendar' color={color} />,

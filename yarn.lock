@@ -1561,6 +1561,11 @@
   resolved "https://registry.npmjs.org/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.6.1.tgz"
   integrity sha512-9FqhNjKQWpQ3fGnSOCovHOm+yhhiorKEqYLAfd525jWavunDJcx8rOW6i6ozAh+FbwcYMkL7b+3j4UR/30MpoQ==
 
+"@freakycoder/react-native-bounceable@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@freakycoder/react-native-bounceable/-/react-native-bounceable-0.2.5.tgz#ad61bdafbf68465e9c2145e99c09b500ae091f0e"
+  integrity sha512-J8WBOYxbm/um7SqXYneduZ08T5Kin9z+ixsS3wOLtpeNvKscuqmDEgsgefTYydeSIoI5dOfWmklnRRgu5i/8nA==
+
 "@grpc/grpc-js@^1.3.2":
   version "1.4.5"
   resolved "https://registry.npmjs.org/@grpc/grpc-js/-/grpc-js-1.4.5.tgz"
@@ -5456,6 +5461,11 @@ react-native-gesture-handler@^1.10.3:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-monthly@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-monthly/-/react-native-monthly-0.1.5.tgz#67ad82c9bd7b11a2f30c1903f4d26af9d79db00f"
+  integrity sha512-2ZkAuKCIlE1Z4oLS6tqlI4Q/FzdzGbzAxzj/9txYCHzOW+nHYojrnpPx45cAU/Lkt5BOCXn3LCaIxRSMGbZHhQ==
 
 react-native-reanimated@^2.2.4:
   version "2.2.4"
