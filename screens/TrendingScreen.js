@@ -31,29 +31,45 @@ const {primary, secondary, tertiary, brand, white} = Colors;
 
 import {Calendar, Agenda} from "react-native-calendars";
 
-const TrendingScreen = ({navigation}) => {
+const TrendingScreen = () => {
 
     const [numberOfDays, setNumberOfDays] = useState(31)
-    const [today, setToday] = useState(1);
+    const [currentDate, setCurrentDate] = useState('');
+    const [minDate, setMinDate] = useState('');
+    const [maxDate, setMaxDate] = useState('');
+
 
     const initializeCalendar = () => {
         const today = new Date();
-        const month = today.getMonth();
-        const day = today.getDay();
-        console.log(day);
-        console.log(today.toDateString());
-        
-
-        if(month === 0 || month === 2 || month === 4 || month === 6 || month === 7 || month === 9 || month === 11){
-            setNumberOfDays(31);
+        const yyyy = today.getFullYear().toString();
+        const minYear = (today.getFullYear() - 1).toString();
+        const maxYear = (today.getFullYear() + 2).toString();
+        const month = (today.getMonth() + 1).toString();
+        const monthInt = today.getMonth() + 1;
+        const dayInt = today.getDate();
+        const day = today.getDate().toString();
+        if(dayInt < 10 && monthInt < 10){
+        setCurrentDate(`${yyyy}-0${month}-0${day}`);
+        setMaxDate(`${maxYear}-0${month}-0${day}`);
+        setMinDate(`${minYear}-0${month}-0${day}`);
         }
-        else if(month == 1){
-            setNumberOfDays(28);
+        else if (dayInt < 10){
+          setCurrentDate(`${yyyy}-${month}-0${day}`);
+          setMaxDate(`${maxYear}-${month}-0${day}`);
+          setMinDate(`${minYear}-${month}-0${day}`);
+        }
+        else if (monthInt < 10){
+          setCurrentDate(`${yyyy}-0${month}-${day}`);
+          setMaxDate(`${maxYear}-0${month}-${day}`);
+          setMinDate(`${minYear}-0${month}-${day}`);
         }
         else{
-            setNumberOfDays(30);
+          setCurrentDate(`${yyyy}-${month}-${day}`);
+          setMaxDate(`${maxYear}-${month}-${day}`);
+          setMinDate(`${minYear}-${month}-${day}`);
         }
-        setToday(day);
+        console.log(currentDate);
+        console.log(day);
     }
 
     useEffect(()=> {
@@ -93,11 +109,11 @@ const TrendingScreen = ({navigation}) => {
     console.log('day changed');
   }}
   // Initially selected day
-  current={'2022-01-02'}
+  current={currentDate}
   // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-  minDate={'2021-05-10'}
+  minDate={minDate}
   // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-  maxDate={'2024-05-30'}
+  maxDate={maxDate}
   // Max amount of months allowed to scroll to the past. Default = 50
   pastScrollRange={50}
   // Max amount of months allowed to scroll to the future. Default = 50
@@ -144,6 +160,7 @@ const TrendingScreen = ({navigation}) => {
     backgroundColor: primary,
     calendarBackground: primary,
     monthTextColor: brand,
+    
     agendaDayTextColor: 'yellow',
     agendaDayNumColor: 'green',
     agendaTodayColor: 'red',
