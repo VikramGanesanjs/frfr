@@ -56,6 +56,14 @@ const Welcome = ({ navigation }) => {
     //function that prompts the user for notification permission
 
     const registerForPushNotificationsAsync = async () => {
+        Notifications.setNotificationHandler({
+            handleNotification: async () => ({
+                shouldShowAlert: true,
+                shouldPlaySound: true,
+                shouldSetBadge: false,
+            })
+        })
+
         let token;
         if (Constants.isDevice) {
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -91,31 +99,31 @@ const Welcome = ({ navigation }) => {
 }
 
         // Test function that sends one push notification
-    // const sendPushNotification = async (expoToken) => {
+    const sendPushNotification = async (expoToken) => {
 
         
-    //     const message = {
-    //         to: expoToken,
-    //         sound: 'default',
-    //         title: 'Original Title',
-    //         body: 'Here is the body!',
-    //         data: { someData: 'goes here' },
+        const message = {
+            to: expoToken,
+            sound: 'default',
+            title: 'Roro',
+            body: 'You are a poo head!',
+            data: { someData: 'goes here' },
 
-    //     };
+        };
 
-    //     await fetch('https://exp.host/--/api/v2/push/send', {
-    //         method: 'POST',
-    //         headers: {
-    //             Accept: 'application/json',
-    //             'Accept-encoding': 'gzip, deflate',
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(message)
+        await fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Accept-encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(message)
             
-    // });
+    });
 
     
-    // }
+ }
 
 
     const retrieveExpoPushToken = async () => {
@@ -164,10 +172,7 @@ const Welcome = ({ navigation }) => {
       console.log(response);
     });
 
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
-    }}, [])
+    }, [])
     
 
     return(
@@ -195,9 +200,9 @@ const Welcome = ({ navigation }) => {
                                 Logout
                             </ButtonText>
                         </StyledButton>
-                        <StyledButton onPress={() => {
-                            retrieveExpoPushToken();
-                            // sendPushNotification(expoPushToken);
+                        <StyledButton onPress={async () => {
+                            await retrieveExpoPushToken().then(() => sendPushNotification(expoPushToken));
+                            
                         }}>
                             <ButtonText>
                                 Send push notification
@@ -215,6 +220,7 @@ const Welcome = ({ navigation }) => {
     );
 
 }
+
 
 
 
