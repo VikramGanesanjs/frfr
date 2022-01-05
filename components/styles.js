@@ -255,3 +255,18 @@ export const CalendarContainer = styled.View`
     margin-bottom: 70px;
     background-color: ${primary};
 `;
+
+export const ListItemContainer = styled.View`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    margin: 20px;
+    height: 104px;
+    width: 290px;
+    border-width: 20px;
+    border-color: ${brand};
+    background-color: ${white};
+    border-radius: 15px;
+`;

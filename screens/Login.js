@@ -215,7 +215,7 @@ const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword, ..
                 </RightIcon>
             )}
         </View>
-    )
+    );
 }
 
 const ErrorDisplay = ({signupError}) => {

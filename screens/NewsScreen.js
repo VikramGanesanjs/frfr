@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 // import tabBarIcons
 import Home from '../tabBarIcons/Home';
 import News from '../tabBarIcons/News';
@@ -23,22 +23,30 @@ import{
     TabBar,
     TabBarInnerContainer,
     ScreenContainer,
-    TabBarContainerScreen
+    TabBarContainerScreen,
+    ListItemContainer
 } from './../components/styles'
 
 const NewsScreen = ({navigation}) => {
+    
+    const [todoItems, setTodoItems] = useState({});
+
     return(
         <WelcomeContainer> 
                 <InnerContainer>
-                <View>
-                    <SubTitle>
-                        List
-                    </SubTitle>
-                </View>
+                <FlatList>
+
+                </FlatList>
                 </InnerContainer>
             </WelcomeContainer>
     );
 
+}
+
+const ListItem = ({ title, urgency, time, date }) => {
+    <ListItemContainer>
+        
+    </ListItemContainer>
 }
 
 export default NewsScreen;
