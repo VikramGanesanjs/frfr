@@ -1,5 +1,0 @@
-background = slate-700
-red = red-500
-blue = sky-500
-green = emerald-500
-purple = violet-400
