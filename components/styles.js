@@ -257,16 +257,79 @@ export const CalendarContainer = styled.View`
 `;
 
 export const ListItemContainer = styled.View`
-    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+
+    height: 104px;
+    width: 100%;
+    background-color: ${primary};
+
+`;
+
+export const ListItemMainContainer = styled.View`
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 10px;
-    margin: 20px;
+
     height: 104px;
-    width: 290px;
-    border-width: 20px;
-    border-color: ${brand};
+    width: calc(100vw - 50px);
     background-color: ${white};
-    border-radius: 15px;
 `;
+
+export const ListItemSubContainer = styled.View`
+    display: flex;
+    height: 60px;
+    width: calc(100vw - 50px);
+    background-color: ${tertiary}
+    flex-direction: row;
+    
+`;
+
+export const ListItemCheckBox = styled.View`
+    display: flex;
+    height: 104px;
+    width: 50px;
+    background-color: ${brand}
+    
+`;
+export const ListItemSubContainer2 = styled.View`
+    display: flex;
+    height: 44px;
+    width: calc(100vw - 50px);
+    background-color: ${tertiary};
+    flex-direction: row;
+    
+`;
+export const ListItemTitleContainer = styled.View`
+    background-color: ${primary};
+    height: 60px;
+    width: 150px;
+
+`;
+
+export const ListItemTimeContainer = styled.View`
+    background-color: ${primary};
+    height: 44px;
+    width: 125px;
+
+
+`;
+
+export const ListItemTagsContainer = styled.View`
+    background-color: ${primary};
+    height: 44px;
+    width: 125px;
+
+`;
+
+export const ListItemUrgencyContainer = styled.View`
+    background-color: ${primary}};
+    height: 60px;
+    width: 100px;
+
+`;
+

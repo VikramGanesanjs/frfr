@@ -48,10 +48,7 @@ const{brand, darkLight, primary} = Colors;
 const Welcome = ({ navigation }) => {
     
     const [name, setName] = useState('');
-    const [expoPushToken, setExpoPushToken] = useState('');
-    const [notification, setNotification] = useState(false);
-    const notificationListener = useRef();
-    const responseListener = useRef();
+
 
     //function that prompts the user for notification permission
 
@@ -133,12 +130,12 @@ const Welcome = ({ navigation }) => {
             
             const token = (docSnap._document.data.value.mapValue.fields.expoPushToken.stringValue);
             console.log(token);
-            setExpoPushToken(token);
-            console.log(expoPushToken);
+            return token;
 
         } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
+        return;
         }
     }
 
@@ -161,16 +158,6 @@ const Welcome = ({ navigation }) => {
         retrieveName();
         registerForPushNotificationsAsync();
         
-
-    // This listener is fired whenever a notification is received while the app is foregrounded
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-
-    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
 
     }, [])
     
@@ -201,7 +188,7 @@ const Welcome = ({ navigation }) => {
                             </ButtonText>
                         </StyledButton>
                         <StyledButton onPress={async () => {
-                            await retrieveExpoPushToken().then(() => sendPushNotification(expoPushToken));
+                            await retrieveExpoPushToken().then((token) => sendPushNotification(token));
                             
                         }}>
                             <ButtonText>
