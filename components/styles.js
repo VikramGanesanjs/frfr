@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import {View, Text, Image, TouchableOpacity, Pressable} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Pressable, TouchableWithHighlight} from 'react-native';
 import Constants from 'expo-constants';
 
 const StatusBarHeight = Constants.statusBarHeight;
@@ -33,13 +33,12 @@ export const InnerContainer = styled.View`
 `;
 
 
-export const WelcomeContainer = styled.View`
+export const WelcomeContainer = styled.SafeAreaView`
     flex: 1;
     width: 100%;
     align-items: center;
     margin: auto;
-    padding-top: 300px;
-    padding-bottom: 300px;
+    justify-content: center;
     position: absolute;
     height: 100%;
     background-color: ${primary}
@@ -276,15 +275,17 @@ export const ListItemMainContainer = styled.View`
     flex-direction: column;
 
     height: 104px;
-    width: calc(100vw - 50px);
+    width: 100%;
+    
     background-color: ${white};
 `;
 
 export const ListItemSubContainer = styled.View`
     display: flex;
     height: 60px;
-    width: calc(100vw - 50px);
-    background-color: ${tertiary}
+    width: 100%;
+   
+    background-color: ${primary}
     flex-direction: row;
     
 `;
@@ -292,15 +293,16 @@ export const ListItemSubContainer = styled.View`
 export const ListItemCheckBox = styled.View`
     display: flex;
     height: 104px;
-    width: 50px;
+    width: 150px;
     background-color: ${brand}
     
 `;
 export const ListItemSubContainer2 = styled.View`
     display: flex;
     height: 44px;
-    width: calc(100vw - 50px);
-    background-color: ${tertiary};
+    width: 100%;
+
+    background-color: ${primary};
     flex-direction: row;
     
 `;
@@ -308,6 +310,7 @@ export const ListItemTitleContainer = styled.View`
     background-color: ${primary};
     height: 60px;
     width: 150px;
+    padding: 10px;
 
 `;
 
@@ -315,6 +318,7 @@ export const ListItemTimeContainer = styled.View`
     background-color: ${primary};
     height: 44px;
     width: 125px;
+    padding: 10px;
 
 
 `;
@@ -323,6 +327,7 @@ export const ListItemTagsContainer = styled.View`
     background-color: ${primary};
     height: 44px;
     width: 125px;
+    padding: 10px;
 
 `;
 
@@ -330,6 +335,25 @@ export const ListItemUrgencyContainer = styled.View`
     background-color: ${primary}};
     height: 60px;
     width: 100px;
+    padding: 10px;
 
 `;
 
+export const ListItemCheckButton = styled.TouchableOpacity`
+    height: 104px;  
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${primary}
+`;
+
+
+export const ReminderHeaderContainer = styled.View`
+    
+    
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+`;

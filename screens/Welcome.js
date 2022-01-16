@@ -21,12 +21,7 @@ import{
     TabBarInnerContainer
 } from './../components/styles'
 
-// import tabBarIcons
-import Home from '../tabBarIcons/Home';
-import News from '../tabBarIcons/News';
-import Account from '../tabBarIcons/Account';
-import Trending from '../tabBarIcons/Trending';
-import Search from '../tabBarIcons/Search';
+
 import { signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, auth } from '../config/firebase';
