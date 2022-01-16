@@ -10,12 +10,15 @@ import NewsScreen from '../screens/NewsScreen';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Colors } from '../components/styles';
-const{brand, darkLight, white, primary} = Colors;
+import { createStackNavigator } from '@react-navigation/stack';
+import Lists from '../screens/Lists';
+const {brand, darkLight, white, primary} = Colors;
 
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function HomeStack({ navigation }) {
+export default function HomeStack() {
   return (
     <Tab.Navigator headerMode='none' initialRouteName='Home' screenOptions={{
       headerShown: false,
@@ -45,7 +48,7 @@ export default function HomeStack({ navigation }) {
           
         tabBarLabel: ({ color }) => <TabBarLabel color={color} title='HOME' />,
       }}/>
-      <Tab.Screen name= 'LIST' component={NewsScreen} options={{
+      <Tab.Screen name= 'LIST' component={ListsStack} options={{
         tabBarIcon: ({color}) => <Ionicons name='list' color={color}/>,
         tabBarLabel: ({ color }) => <TabBarLabel color={color} title='LIST' />,
         }}/>
@@ -64,6 +67,19 @@ export default function HomeStack({ navigation }) {
     </Tab.Navigator>
   );
 }
+
+function ListsStack(){
+  return(
+    <Stack.Navigator screenOptions={{
+        headerShown: false,
+        headerShadowVisible: false,
+    }}>
+      <Stack.Screen name="Lists" component={Lists}/>
+      <Stack.Screen name="ListView" component={NewsScreen} />
+    </Stack.Navigator>
+  );
+}
+
 
 const styles = StyleSheet.create({
   shadow:{
