@@ -1,14 +1,12 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-
 import Welcome from '../screens/Welcome';
 import AccountScreen from '../screens/AccountScreen';
 import SearchScreen from '../screens/SearchScreen';
 import TrendingScreen from '../screens/TrendingScreen';
 import NewsScreen from '../screens/NewsScreen';
 import { Ionicons } from '@expo/vector-icons';
-
 import { Colors } from '../components/styles';
 import { createStackNavigator } from '@react-navigation/stack';
 import Lists from '../screens/Lists';
@@ -73,6 +71,7 @@ function ListsStack(){
     <Stack.Navigator screenOptions={{
         headerShown: false,
         headerShadowVisible: false,
+        animationEnabled: false,
     }}>
       <Stack.Screen name="Lists" component={Lists}/>
       <Stack.Screen name="ListView" component={NewsScreen} />

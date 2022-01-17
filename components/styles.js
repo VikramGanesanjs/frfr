@@ -38,7 +38,6 @@ export const WelcomeContainer = styled.SafeAreaView`
     width: 100%;
     align-items: center;
     margin: auto;
-    justify-content: center;
     position: absolute;
     height: 100%;
     background-color: ${primary}
@@ -73,6 +72,10 @@ export const PageTitle = styled.Text`
 
     ${(props) => props.welcome && `
         font-size: 35px;
+    `}
+
+    ${(props) => props.lists && `
+        font-size: 20px;
     `}
 `;
 
@@ -348,12 +351,40 @@ export const ListItemCheckButton = styled.TouchableOpacity`
     background-color: ${primary}
 `;
 
+export const ListsContainer = styled.View`
+    height: 100%
+    display: flex;
+    width: 100%
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
+
 
 export const ReminderHeaderContainer = styled.View`
-    
-    
     height: 50px;
     width: 100%;
     display: flex;
     flex-direction: row;
 `;
+
+export const MyListsContainer = styled.View`
+    height: 500px;
+    width: 100%;
+    display: flex;
+    align-items: center;  
+    background-color: ${primary};
+`;
+
+export const MyListsObject = styled.View`
+    height: 175px;
+    width: 80%
+    border-radius: 20px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    background-color: ${primary};
+    shadow-color: ${brand};
+    shadow-opacity: 0.25;
+    elevation: 20;
+    shadow-radius: 5px;
+`

@@ -42,7 +42,7 @@ const{brand, darkLight, primary} = Colors;
 
 const Welcome = ({ navigation }) => {
     
-    const [name, setName] = useState('');
+    const [name, setName] = useState('Welcome!');
 
 
     //function that prompts the user for notification permission
@@ -150,8 +150,11 @@ const Welcome = ({ navigation }) => {
     }
 
     useEffect(() => {
-        retrieveName();
-        registerForPushNotificationsAsync();
+        setTimeout(async () => {
+            await retrieveName();
+            await registerForPushNotificationsAsync();
+        }, 1000)
+        
         
 
     }, [])

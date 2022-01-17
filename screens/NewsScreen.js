@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+import React, { useState } from 'react'; 
+import {View, Text, TouchableOpacity, FlatList, SafeAreaView} from 'react-native';
 
 
 
@@ -43,28 +43,57 @@ import { Dimensions } from "react-native";
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; 
 
-const NewsScreen = () => {
+const NewsScreen = ({ navigation }) => {
     
-    const [todoItems, setTodoItems] = useState({});
+    const [todoItems, setTodoItems] = useState([]);
 
+    const DATA = [
+        {
+          id: '3',
+          title: 'First Item',
+          urgency: 'Urgent',
+          date: '12-31-2023',
+          time: '8:00 PM,'
+        },
+        {
+          id: '2',
+          title: 'Second Item',
+          urgency: 'Urgent',
+          date: '12-31-2023',
+          time: '8:00 PM,'
+        },
+        {
+          id: '1',
+          title: 'Third Item',
+          urgency: 'Urgent',
+          date: '12-31-2023',
+          time: '8:00 PM,'
+        },
+      ];
+
+
+
+    const renderItem = ({ item }) => {
+        return(
+            <View>
+            <Line/>
+            <ListItem title={item.title} urgency={item.urgency} time={item.time} date={item.date}/>
+            </View> 
+        );
+    };
+    
   
 
     return(
         <WelcomeContainer> 
-               <ScrollView style={{height: height, width: width, flex: 1, }}>
-                <ReminderHeader />
-                <Line/>
-                    <ListItem title="Piano Class" urgency="Urgent" time="8:00 PM" date="12/31/2021"/> 
-                <Line/>
-                    <ListItem title="Piano Class" urgency="Urgent" time="8:00 PM" date="12/31/2021"/> 
-                <Line/>
-                
-                    <ListItem title="Piano Class" urgency="Urgent" time="8:00 PM" date="12/31/2021"/> 
-                <Line/>
-                
-                    <ListItem title="Piano Class" urgency="Urgent" time="8:00 PM" date="12/31/2021"/> 
-                <Line/>
-                </ScrollView>
+               <SafeAreaView style={{height: height, width: width, flex: 1, }}>
+                <ReminderHeader navigation={navigation}/>
+                <FlatList
+                data={DATA}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+      />
+                </SafeAreaView>
             </WelcomeContainer>
     );
 
@@ -119,7 +148,7 @@ const ListItem = ({ title, urgency, time, date }) => {
     );
 }
 
-const ReminderHeader = () => {
+const ReminderHeader = ({ navigation }) => {
     return(
         <ReminderHeaderContainer>
             <View style={{ marginRight: 250 }}>
@@ -127,7 +156,7 @@ const ReminderHeader = () => {
                 To-Dos
             </PageTitle>
             </View>
-            <TouchableOpacity style={{
+            <TouchableOpacity onPress={() => navigation.navigate("Lists")}style={{
                 display:'flex',
                 justifyContent: 'center',
                 height: 50,

@@ -105,7 +105,7 @@ const Signup = ({navigation}) => {
                                     emailAddress: values.email,
                                     userIdentificationNumber: auth.currentUser.uid,
                                   });
-                            }, 4000)
+                            }, 1000)
                             
                         }
                         
