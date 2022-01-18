@@ -34,7 +34,7 @@ import{
 import { View, Image } from 'react-native';
 
 import {auth, db} from '../config/firebase';
-import {setDoc, doc} from 'firebase/firestore';
+import {setDoc, doc, collection} from 'firebase/firestore';
 
 
 
@@ -105,6 +105,9 @@ const Signup = ({navigation}) => {
                                     emailAddress: values.email,
                                     userIdentificationNumber: auth.currentUser.uid,
                                   });
+
+                                const ref = doc(db, "Users", auth.currentUser.uid, `R-${auth.currentUser.uid}`, `W-${auth.currentUser.uid}`)
+                                setDoc(ref, {})
                             }, 1000)
                             
                         }

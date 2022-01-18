@@ -40,7 +40,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import { Dimensions } from "react-native";
 import { db, auth } from '../config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, Timestamp } from 'firebase/firestore';
+import { parse } from 'date-fns';
+import { format } from 'date-fns/esm';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; 
@@ -61,7 +63,7 @@ const NewsScreen = ({ navigation }) => {
     }
 
     const retrieveReminders = async () => {
-        const docRef = doc(db, "Users", auth.currentUser.uid, `R-${auth.currentUser.uid}`, `W-${auth.currentuser.uid}`);
+        const docRef = doc(db, "Users", auth.currentUser.uid, `R-${auth.currentUser.uid}`, `W-${auth.currentUser.uid}`);
         const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {    
@@ -109,10 +111,17 @@ const NewsScreen = ({ navigation }) => {
 
 
     const renderItem = ({ item }) => {
+        
+        const timeStamp = new Timestamp(item.time.seconds, item.time.nanoseconds)
+        const date = timeStamp.toDate()
+        const time = date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}); 
+        const formattedDate = date.toLocaleDateString();
+
+
         return(
             <View>
             <Line/>
-            <ListItem title={item.title} urgency={item.urgency} time={""} date={""}/>
+            <ListItem title={item.title} urgency={item.urgency} time={time} date={formattedDate}/>
             </View> 
         );  
     };
