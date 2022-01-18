@@ -380,6 +380,9 @@ export const MyListsObject = styled.View`
     height: 175px;
     width: 80%
     border-radius: 20px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
     margin-bottom: 20px;
     margin-top: 10px;
     background-color: ${primary};

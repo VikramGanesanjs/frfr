@@ -50,6 +50,7 @@ var height = Dimensions.get('window').height;
 const NewsScreen = ({ navigation }) => {
     
     const [todoItems, setTodoItems] = useState([]);
+    const [listTitle, setListTitle] = useState('List')
 
     function containsObject(obj, list) {
         let i;
@@ -70,7 +71,10 @@ const NewsScreen = ({ navigation }) => {
 
         const obj = docSnap.data();
         Object.keys(obj).forEach((key) => { 
-            if(!(containsObject(obj[key], todoItems))){  
+            if(key === 'title'){
+                setListTitle(obj[key])
+            }
+            else if(!(containsObject(obj[key], todoItems))){  
                 setTodoItems([...todoItems, obj[key]]);  
             }   
               
@@ -135,7 +139,7 @@ const NewsScreen = ({ navigation }) => {
     return(
         <WelcomeContainer> 
                <SafeAreaView style={{height: height, width: width, flex: 1, }}>
-                <ReminderHeader navigation={navigation}/>
+                <ReminderHeader navigation={navigation}title={listTitle}/>
                 <FlatList
                 data={todoItems}
                 renderItem={renderItem}
@@ -197,12 +201,12 @@ const ListItem = ({ title, urgency, time, date }) => {
     );
 }
 
-const ReminderHeader = ({ navigation }) => {
+const ReminderHeader = ({ navigation, title }) => {
     return(
         <ReminderHeaderContainer>
             <View style={{ marginRight: 250 }}>
             <PageTitle size={60} >
-                To-Dos
+                {title}
             </PageTitle>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate("Lists")}style={{
