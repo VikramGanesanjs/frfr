@@ -1,7 +1,7 @@
-import React, { useState } from 'react'; 
+import React, { useEffect, useState } from 'react'; 
 import {View, Text, TouchableOpacity, FlatList, SafeAreaView} from 'react-native';
 
-
+import { isEqual } from 'lodash'
 
 const { white, primary, brand, tertiary, darkLight } = Colors;
 
@@ -39,6 +39,8 @@ import{
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { Dimensions } from "react-native";
+import { db, auth } from '../config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; 
@@ -47,9 +49,42 @@ const NewsScreen = ({ navigation }) => {
     
     const [todoItems, setTodoItems] = useState([]);
 
+    function containsObject(obj, list) {
+        let i;
+        for (i = 0; i < list.length; i++) {
+            if (isEqual(list[i], obj)) {
+                return true;
+            }
+        }   
+    
+        return false;
+    }
+
+    const retrieveReminders = async () => {
+        const docRef = doc(db, "Users", auth.currentUser.uid, `R-${auth.currentUser.uid}`, `W-${auth.currentuser.uid}`);
+        const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {    
+
+        const obj = docSnap.data();
+        Object.keys(obj).forEach((key) => { 
+            if(!(containsObject(obj[key], todoItems))){  
+                setTodoItems([...todoItems, obj[key]]);  
+            }   
+              
+          });   
+        console.log(todoItems);
+          
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+
+    }
+
     const DATA = [
         {
-          id: '3',
+          id: '3', 
           title: 'First Item',
           urgency: 'Urgent',
           date: '12-31-2023',
@@ -77,11 +112,15 @@ const NewsScreen = ({ navigation }) => {
         return(
             <View>
             <Line/>
-            <ListItem title={item.title} urgency={item.urgency} time={item.time} date={item.date}/>
+            <ListItem title={item.title} urgency={item.urgency} time={""} date={""}/>
             </View> 
-        );
+        );  
     };
     
+
+    useEffect(() => {
+        retrieveReminders();
+    })
   
 
     return(
@@ -89,10 +128,11 @@ const NewsScreen = ({ navigation }) => {
                <SafeAreaView style={{height: height, width: width, flex: 1, }}>
                 <ReminderHeader navigation={navigation}/>
                 <FlatList
-                data={DATA}
+                data={todoItems}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
       />
+            <Line />
                 </SafeAreaView>
             </WelcomeContainer>
     );
