@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState, useContext } from 'react'; 
 import {View, Text, TouchableOpacity, FlatList, SafeAreaView} from 'react-native';
 
 import { isEqual } from 'lodash'
@@ -43,6 +43,7 @@ import { db, auth } from '../config/firebase';
 import { doc, getDoc, Timestamp } from 'firebase/firestore';
 import { parse } from 'date-fns';
 import { format } from 'date-fns/esm';
+import { SelectedListContext } from '../components/SelectedListProvider';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; 
@@ -50,7 +51,9 @@ var height = Dimensions.get('window').height;
 const NewsScreen = ({ navigation }) => {
     
     const [todoItems, setTodoItems] = useState([]);
-    const [listTitle, setListTitle] = useState('List')
+    const [listTitle, setListTitle] = useState('');
+    const {selectedList, setSelectedList} = useContext(SelectedListContext);
+
 
     function containsObject(obj, list) {
         let i;
@@ -64,7 +67,7 @@ const NewsScreen = ({ navigation }) => {
     }
 
     const retrieveReminders = async () => {
-        const docRef = doc(db, "Users", auth.currentUser.uid, `R-${auth.currentUser.uid}`, `W-${auth.currentUser.uid}`);
+        const docRef = doc(db, "Users", auth.currentUser.uid, `R-${auth.currentUser.uid}`, selectedList);
         const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {    
@@ -124,8 +127,8 @@ const NewsScreen = ({ navigation }) => {
 
         return(
             <View>
-            <Line/>
             <ListItem title={item.title} urgency={item.urgency} time={time} date={formattedDate}/>
+            <Line/>
             </View> 
         );  
     };
@@ -140,10 +143,10 @@ const NewsScreen = ({ navigation }) => {
         <WelcomeContainer> 
                <SafeAreaView style={{height: height, width: width, flex: 1, }}>
                 <ReminderHeader navigation={navigation}title={listTitle}/>
+                <Line/>
                 <FlatList
                 data={todoItems}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
       />
             <Line />
                 </SafeAreaView>
@@ -202,6 +205,7 @@ const ListItem = ({ title, urgency, time, date }) => {
 }
 
 const ReminderHeader = ({ navigation, title }) => {
+
     return(
         <ReminderHeaderContainer>
             <View style={{ marginRight: 250 }}>
