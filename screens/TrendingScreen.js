@@ -25,6 +25,10 @@ import{
 const {primary, secondary, tertiary, brand, white} = Colors;
 
 import {Calendar, Agenda} from "react-native-calendars";
+import { isEqual } from 'lodash';
+
+import { db, auth } from '../config/firebase';
+import { collection, getDocs, doc } from 'firebase/firestore';
 
 const TrendingScreen = () => {
 
@@ -32,6 +36,9 @@ const TrendingScreen = () => {
     const [currentDate, setCurrentDate] = useState('');
     const [minDate, setMinDate] = useState('');
     const [maxDate, setMaxDate] = useState('');
+    const [calendarData, setCalendarData] = useState([]);
+    const [eventData, setEventData] = useState([]);
+
 
 
     const initializeCalendar = () => {
@@ -65,10 +72,61 @@ const TrendingScreen = () => {
         }
         console.log(currentDate);
         console.log(day);
+
+        
+
     }
+
+    function containsObject(obj, list) {
+      let i;
+      for (i = 0; i < list.length; i++) {
+          if (isEqual(list[i], obj)) {
+              return true;
+          }
+      }   
+  
+      return false;
+  }
+
+
+    const retrieveData = async () => {
+        const docRef = collection(db, "Users", auth.currentUser.uid, `R-${auth.currentUser.uid}`)
+        const docSnap = await getDocs(docRef);
+        docSnap.forEach((doc) => {
+            let obj = doc.data();
+            obj.id = doc.id;
+            if(!(containsObject(obj, calendarData))){
+                
+                console.log(obj.id)
+                setCalendarData([...calendarData, obj]);
+            }
+        })
+    }
+
+    const formatData = () => {
+      calendarData.forEach((obj) => {
+        Object.keys(obj).forEach((key) => { 
+          if(key === 'title'){
+             console.log(obj.title);
+          }
+          if(key === 'id'){
+            console.log(obj.id)
+          }
+          else if(!(containsObject(obj[key], eventData))){  
+              setEventData([...eventData, obj[key]]);  
+          }   
+          console.log(eventData);
+            
+        }); 
+      })
+    }
+
+    
 
     useEffect(()=> {
         initializeCalendar();
+        retrieveData();
+        formatData();
     }, [])
 
     return(
@@ -82,10 +140,10 @@ const TrendingScreen = () => {
   // the value of date key has to be an empty array []. If there exists no value for date key it is
   // considered that the date in question is not yet loaded
   items={{
-    '2012-05-22': [{name: 'item 1 - any js object'}],
-    '2012-05-23': [{name: 'item 2 - any js object', height: 80}],
-    '2012-05-24': [],
-    '2012-05-25': [{name: 'item 3 - any js object'}, {name: 'any js object'}]
+    '2022-05-22': [{name: 'item 1 - any js object'}],
+    '2022-05-23': [{name: 'item 2 - any js object', height: 80}],
+    '2022-05-24': [],
+    '2022-05-25': [{name: 'item 3 - any js object'}, {name: 'any js object'}]
   }}
   // Callback that gets called when items for a certain month should be loaded (month became visible)
   loadItemsForMonth={month => {
@@ -97,7 +155,7 @@ const TrendingScreen = () => {
   }}
   // Callback that gets called on day press
   onDayPress={day => {
-    console.log('day pressed');
+    console.log(eventData[0]);
   }}
   // Callback that gets called when day changes while scrolling agenda list
   onDayChange={day => {
@@ -115,11 +173,19 @@ const TrendingScreen = () => {
   futureScrollRange={50}
   // Specify how each item should be rendered in agenda
   renderItem={(item, firstItemInDay) => {
-    return <View />;
+    return (<View>
+      <Text>
+        Hello
+      </Text>
+    </View>);
   }}
   // Specify how each date should be rendered. day can be undefined if the item is not first in that day
   renderDay={(day, item) => {
-    return <View />;
+    return (<View>
+      <Text>
+        Hello
+      </Text>
+    </View>);
   }}
   // Specify how empty date content with no items should be rendered
   renderEmptyDate={() => {

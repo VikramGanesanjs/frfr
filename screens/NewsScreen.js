@@ -51,7 +51,7 @@ var height = Dimensions.get('window').height;
 const NewsScreen = ({ navigation }) => {
     
     const [todoItems, setTodoItems] = useState([]);
-    const [listTitle, setListTitle] = useState('');
+    const [listTitle, setListTitle] = useState('Title');
     const {selectedList, setSelectedList} = useContext(SelectedListContext);
 
 
@@ -213,6 +213,7 @@ const ReminderHeader = ({ navigation, title }) => {
                 {title}
             </PageTitle>
             </View>
+            <View>
             <TouchableOpacity onPress={() => navigation.navigate("Lists")}style={{
                 display:'flex',
                 justifyContent: 'center',
@@ -224,7 +225,9 @@ const ReminderHeader = ({ navigation, title }) => {
             }}>
                 <Ionicons name='close-circle' size={30} color={brand}/>
 
-            </TouchableOpacity>
+            </TouchableOpacity>  
+            </View>
+            
         </ReminderHeaderContainer>
     );
 }

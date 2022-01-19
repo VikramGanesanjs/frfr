@@ -135,6 +135,8 @@ const CustomTabBarButton = ({ navigation }) => {
         width: 70,
         height: 70,
         borderRadius: 35,
+        borderColor: white,
+        borderWidth: 2,
         backgroundColor: brand,
         justifyContent: 'center',
         alignItems: 'center'
