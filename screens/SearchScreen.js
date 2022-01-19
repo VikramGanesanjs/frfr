@@ -24,13 +24,11 @@ import{
 const SearchScreen = ({navigation}) => {
     return(
         <WelcomeContainer> 
-        <InnerContainer>
-        <View>
-            <SubTitle>
-                Add
-            </SubTitle>
-        </View>
-        </InnerContainer>
+        <StyledButton onPress={() => navigation.navigate("AddReminder")}>
+                <ButtonText>
+                    Go to Add Reminder Screen
+                </ButtonText>
+            </StyledButton>
     </WelcomeContainer>
     );
 

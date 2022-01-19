@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../components/styles';
 import { createStackNavigator } from '@react-navigation/stack';
 import Lists from '../screens/Lists';
+import AddReminder from './../screens/AddReminder';
 const {brand, darkLight, white, primary} = Colors;
 
 
@@ -22,44 +23,47 @@ export default function HomeStack() {
       headerShown: false,
       tabBarStyle:{
         position: 'absolute',
+        
         flex: 1,
-        bottom: 25,
-        left: 20,
-        right: 20,
+      
         elevation: 0,
-        backgroundColor: '#ffffff',
-        borderRadius: 15,
+        backgroundColor: primary,
         height: 90,
-        ...styles.shadow,
         justifyContent: 'center',
         alignItems: 'center',
       },
+      tabBarShowLabel: false,
       tabBarActiveTintColor: brand,
       tabBarInactiveTintColor: darkLight,
-      tabBarLabelStyle:{
-        fontSize: 20,
-      },
     }}>
       <Tab.Screen name='Home' component={Welcome} options={{
-        tabBarIcon: ({ color }) => 
-          <Ionicons name='home' color={color} /> ,
+      tabBarButton: CustomTabBarButton2,
+      tabBarIcon: ({ color }) => 
+          <Ionicons name='home' color={color} size={30}/> ,
           
-        tabBarLabel: ({ color }) => <TabBarLabel color={color} title='HOME' />,
+        
       }}/>
       <Tab.Screen name= 'LIST' component={ListsStack} options={{
-        tabBarIcon: ({color}) => <Ionicons name='list' color={color}/>,
-        tabBarLabel: ({ color }) => <TabBarLabel color={color} title='LIST' />,
+       tabBarButton: CustomTabBarButton2,
+       tabBarIcon: ({ color }) => 
+           <Ionicons name='list' color={color} size={30}/> ,
         }}/>
-      <Tab.Screen name='ADD' component={SearchScreen} options={{
-        tabBarButton: ({ props }) => <CustomTabBarButton {...props} /> 
-      }}/>
+      <Tab.Screen name='ADD' component={AddStack} options={({navigation}) => {
+        return{
+          tabBarButton: () => <CustomTabBarButton navigation={navigation}/> 
+        }
+      }
+        
+    }/>
       <Tab.Screen name='Calendar' component={TrendingScreen} options={{
-        tabBarIcon: ({color}) => <Ionicons name='calendar' color={color} />,
-        tabBarLabel: ({ color }) => <TabBarLabel color={color} title='CALENDAR' />,
+       tabBarButton: CustomTabBarButton2,
+       tabBarIcon: ({ color }) => 
+           <Ionicons name='calendar' color={color} size={30}/> ,
         }}/>
       <Tab.Screen name='Account' component={AccountScreen} options={{
-        tabBarIcon: ({color}) => <Ionicons name='person' color={color}/>,
-        tabBarLabel: ({ color }) => <TabBarLabel color={color} title='ACCOUNT' />,
+       tabBarButton: CustomTabBarButton2,
+       tabBarIcon: ({ color }) => 
+           <Ionicons name='person' color={color} size={30}/> ,
       }}/>
           
     </Tab.Navigator>
@@ -76,6 +80,20 @@ function ListsStack(){
       <Stack.Screen name="Lists" component={Lists}/>
       <Stack.Screen name="ListView" component={NewsScreen} />
     </Stack.Navigator>
+  );
+}
+
+function AddStack(){
+
+  return(
+  <Stack.Navigator screenOptions={{
+    headerShown: false,
+    headerShadowVisible: false,
+    animationEnabled: false,
+  }}>
+  <Stack.Screen name="AddReminder" component={AddReminder}/>
+  <Stack.Screen name="AddList" component={SearchScreen} />
+</Stack.Navigator>
   );
 }
 
@@ -105,15 +123,14 @@ const TabBarLabel = ({color, title}) => {
   );
 }
 
-const CustomTabBarButton = ({ onPress }) => {
+const CustomTabBarButton = ({ navigation }) => {
   return(
     <TouchableOpacity style={{
       top: -30,
       justifyContent: 'center',
       alignItems: 'center',
-      ...styles.shadow,
       
-    }} onPress={onPress}>
+    }} onPress={() => navigation.navigate("ADD")}>
       <View style={{
         width: 70,
         height: 70,
@@ -122,8 +139,22 @@ const CustomTabBarButton = ({ onPress }) => {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <Ionicons name='add' color='#ffffff'/>
+        <Ionicons name='add' color='#ffffff' size={25}/>
       </View>
     </TouchableOpacity>
   );
+}
+
+const CustomTabBarButton2 = (props) => {
+  return(
+    <TouchableOpacity
+    {...props}
+    style={
+      props.accessibilityState.selected
+        ? [...props.style, { borderTopColor: brand, borderTopWidth: 10,}]
+        : props.style
+    }/>
+      
+  );
+
 }

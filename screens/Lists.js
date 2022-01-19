@@ -37,7 +37,7 @@ const Lists = ({ navigation }) => {
         const docSnap = await getDocs(docRef);
         docSnap.forEach((doc) => {
             let obj = doc.data();
-                obj.id = doc.id;
+            obj.id = doc.id;
             if(!(containsObject(obj, listOfLists))){
                 
                 console.log(obj.id)
