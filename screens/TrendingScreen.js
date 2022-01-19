@@ -28,7 +28,8 @@ import {Calendar, Agenda} from "react-native-calendars";
 import { isEqual } from 'lodash';
 
 import { db, auth } from '../config/firebase';
-import { collection, getDocs, doc } from 'firebase/firestore';
+import { collection, getDocs, doc, Timestamp } from 'firebase/firestore';
+import { format } from 'date-fns/esm';
 
 const TrendingScreen = () => {
 
@@ -38,6 +39,8 @@ const TrendingScreen = () => {
     const [maxDate, setMaxDate] = useState('');
     const [calendarData, setCalendarData] = useState([]);
     const [eventData, setEventData] = useState([]);
+    const [items, setItems] = useState({})
+    const [markedItems, setMarkedItems] = useState({});
 
 
 
@@ -97,7 +100,6 @@ const TrendingScreen = () => {
             obj.id = doc.id;
             if(!(containsObject(obj, calendarData))){
                 
-                console.log(obj.id)
                 setCalendarData([...calendarData, obj]);
             }
         })
@@ -109,13 +111,32 @@ const TrendingScreen = () => {
           if(key === 'title'){
              console.log(obj.title);
           }
-          if(key === 'id'){
+          else if(key === 'id'){
             console.log(obj.id)
           }
           else if(!(containsObject(obj[key], eventData))){  
               setEventData([...eventData, obj[key]]);  
           }   
-          console.log(eventData);
+          eventData.forEach((obj) => {
+            const time = obj.time;
+            const timeStamp = new Timestamp(time.seconds, time.nanoseconds)
+            const d = timeStamp.toDate()
+            const formattedDate = new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0];
+            if(!(Object.keys(items).includes(formattedDate))){
+              
+              console.log("Hi");
+              setItems({...items, [formattedDate]: [{name: obj.title}]})
+              setMarkedItems({...markedItems, [formattedDate]: {marked: true}});            }
+            else{
+              let tmp = items;
+              if(!(containsObject({name: obj.title}, tmp[formattedDate]))){
+                tmp[formattedDate].push({name: obj.title})
+                setItems(tmp);  
+              }
+              
+            }  
+            
+          })
             
         }); 
       })
@@ -126,8 +147,8 @@ const TrendingScreen = () => {
     useEffect(()=> {
         initializeCalendar();
         retrieveData();
-        formatData();
-    }, [])
+        formatData();  
+    }) 
 
     return(
         <SafeAreaView style={{
@@ -139,24 +160,8 @@ const TrendingScreen = () => {
   // The list of items that have to be displayed in agenda. If you want to render item as empty date
   // the value of date key has to be an empty array []. If there exists no value for date key it is
   // considered that the date in question is not yet loaded
-  items={{
-    '2022-05-22': [{name: 'item 1 - any js object'}],
-    '2022-05-23': [{name: 'item 2 - any js object', height: 80}],
-    '2022-05-24': [],
-    '2022-05-25': [{name: 'item 3 - any js object'}, {name: 'any js object'}]
-  }}
+  items={items}
   // Callback that gets called when items for a certain month should be loaded (month became visible)
-  loadItemsForMonth={month => {
-    console.log('trigger items loading');
-  }}
-  // Callback that fires when the calendar is opened or closed
-  onCalendarToggled={calendarOpened => {
-    console.log(calendarOpened);
-  }}
-  // Callback that gets called on day press
-  onDayPress={day => {
-    console.log(eventData[0]);
-  }}
   // Callback that gets called when day changes while scrolling agenda list
   onDayChange={day => {
     console.log('day changed');
@@ -175,17 +180,14 @@ const TrendingScreen = () => {
   renderItem={(item, firstItemInDay) => {
     return (<View>
       <Text>
-        Hello
+        {item.name ? item.name : Hello}
       </Text>
     </View>);
   }}
   // Specify how each date should be rendered. day can be undefined if the item is not first in that day
   renderDay={(day, item) => {
-    return (<View>
-      <Text>
-        Hello
-      </Text>
-    </View>);
+    return <View/>
+     
   }}
   // Specify how empty date content with no items should be rendered
   renderEmptyDate={() => {
@@ -203,11 +205,7 @@ const TrendingScreen = () => {
   // Hide knob button. Default = false
 
   // By default, agenda dates are marked if they have at least one item, but you can override this if needed
-  markedDates={{
-    '2012-05-16': {selected: true, marked: true},
-    '2012-05-17': {marked: true},
-    '2012-05-18': {disabled: true}
-  }}
+  markedDates={markedItems}
   // If disabledByDefault={true} dates flagged as not disabled will be enabled. Default = false
   disabledByDefault={true}
   // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly
