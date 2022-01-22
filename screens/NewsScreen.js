@@ -41,8 +41,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Dimensions } from "react-native";
 import { db, auth } from '../config/firebase';
 import { doc, getDoc, Timestamp } from 'firebase/firestore';
-import { parse } from 'date-fns';
-import { format } from 'date-fns/esm';
 import { SelectedListContext } from '../components/SelectedListProvider';
 
 var width = Dimensions.get('window').width; //full width

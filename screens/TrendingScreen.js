@@ -28,6 +28,8 @@ import {Agenda} from "react-native-calendars";
 import { isEqual } from 'lodash';
 
 import { db, auth } from '../config/firebase';
+
+import { Dimensions } from "react-native";
 import { collection, getDocs, doc, Timestamp } from 'firebase/firestore';
 
 const TrendingScreen = () => {
@@ -194,26 +196,31 @@ const TrendingScreen = () => {
                   <View style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    height: 500,
+                    height: 1000,
                     width: width,
                     backgroundColor: white
                   }}>
                     <View style={{
                       display: 'flex',
-                      height: 500,
-                      width: 20,
-                      backgroundColor: tertiary
+                      height: 1000,
+                      width: 100,
+                      backgroundColor: primary,
                     }}>
-
+                      
                     </View>
                     <View style={{
                       display: 'flex',
-                      height: 500,
-                      width: width - 20,
-                      backgroundColor: tertiary
+                      height: 1000,
+                      width: width - 100,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: primary,
                     }}>
+                      <Text style={{
+                        color: white,
+                      }}>
                       {item.name ? item.name : Hello}
-
+                      </Text>
                     </View>
                   </View>
                 );
