@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
 
 
@@ -31,21 +31,24 @@ import { db, auth } from '../config/firebase';
 
 import { Dimensions } from "react-native";
 import { collection, getDocs, doc, Timestamp } from 'firebase/firestore';
+import { CurrentDateContext } from '../components/CurrentDateContext';
 
 const TrendingScreen = () => {
 
     const [currentDate, setCurrentDate] = useState('');
+    const [currentDateObject, setCurrentDateObject] = useState(new Date());
     const [minDate, setMinDate] = useState('');
     const [maxDate, setMaxDate] = useState('');
     const [calendarData, setCalendarData] = useState([]);
     const [eventData, setEventData] = useState([]);
     const [items, setItems] = useState({})
     const [markedItems, setMarkedItems] = useState({});
+    const [refresh, setRefresh] = useState([]);
 
 
     
-    var width = Dimensions.get('window').width; //full width
-    var height = Dimensions.get('window').height; 
+    let width = Dimensions.get('window').width; //full width
+    let height = Dimensions.get('window').height; 
 
 
 
@@ -79,8 +82,7 @@ const TrendingScreen = () => {
           setMaxDate(`${maxYear}-${month}-${day}`);
           setMinDate(`${minYear}-${month}-${day}`);
         }
-        console.log(currentDate);
-        console.log(day);
+
 
         
 
@@ -109,20 +111,24 @@ const TrendingScreen = () => {
                 setCalendarData([...calendarData, obj]);
             }
         })
+
+        calendarData.forEach((obj) => {
+          Object.keys(obj).forEach((key) => { 
+            if(key === 'title'){
+              let hey = obj.title
+            }
+            else if(key === 'id'){
+              let hi = obj.id
+            }
+            else if(!(containsObject(obj[key], eventData))){  
+                setEventData([...eventData, obj[key]]);  
+            }   
+          })
+        });
     }
 
     const formatData = () => {
-      calendarData.forEach((obj) => {
-        Object.keys(obj).forEach((key) => { 
-          if(key === 'title'){
-             console.log(obj.title);
-          }
-          else if(key === 'id'){
-            console.log(obj.id)
-          }
-          else if(!(containsObject(obj[key], eventData))){  
-              setEventData([...eventData, obj[key]]);  
-          }   
+      
           eventData.forEach((obj) => {
             const time = obj.time;
             const timeStamp = new Timestamp(time.seconds, time.nanoseconds)
@@ -130,7 +136,6 @@ const TrendingScreen = () => {
             const formattedDate = new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000).toISOString().split('T')[0];
             if(!(Object.keys(items).includes(formattedDate))){
               
-              console.log("Hi");
               setItems({...items, [formattedDate]: [{name: obj.title}]})
               setMarkedItems({...markedItems, [formattedDate]: {marked: true}});            }
             else{
@@ -144,17 +149,78 @@ const TrendingScreen = () => {
             
           })
             
-        }); 
-      })
+      }
+
+    const CurrentTimeComponent = () => {
+      const {currentDateObject, setCurrentDateObject} = useContext(CurrentDateContext);
+      const currentTime = currentDateObject.toLocaleTimeString();
+      const arr = currentTime.split(" ")[0].split(":");
+      const amOrPM = currentTime.split(" ")[1];
+      const arr2 = currentTime.split(" ");
+      const timeWithoutSecs = `${arr2[0].split(":")[0]}:${arr2[0].split(":")[1]} ${arr2[1]}`;
+      let numasdf;
+      if(amOrPM === 'AM' && arr[0] === "12"){
+        numasdf = parseInt(arr[1], 10) * 60;
+      }
+      else if(amOrPM === 'PM' && arr[0] === '12'){
+        numasdf = (parseInt(arr[0], 10) * 60) + parseInt(arr[1], 10);
+      }
+      else if(amOrPM === 'PM'){
+          numasdf = ((parseInt(arr[0], 10) + 12) * 60) + (parseInt(arr[1], 10));
+      }
+      else{
+        numasdf = (parseInt(arr[0], 10) * 60) + arr[1];
+      }
+      return(
+
+          <Text style={{
+            top: numasdf,
+            color: white,
+          }}>
+            {timeWithoutSecs}
+          </Text>
+      );
+    }
+    
+
+    const RedLineComponent = () => {
+      const {currentDateObject, setCurrentDateObject} = useContext(CurrentDateContext);
+      
+      const currentTime = currentDateObject.toLocaleTimeString();
+      const arr = currentTime.split(" ")[0].split(":");
+      const amOrPM = currentTime.split(" ")[1];
+      let numasdf;
+      if(amOrPM === 'AM' && arr[0] === "12"){
+        numasdf = parseInt(arr[1], 10) * 60;
+      }
+      else if(amOrPM === 'PM' && arr[0] === '12'){
+        numasdf = (parseInt(arr[0], 10) * 60) + parseInt(arr[1], 10);
+      }
+      else if(amOrPM === 'PM'){
+          numasdf = ((parseInt(arr[0], 10) + 12) * 60) + (parseInt(arr[1], 10));
+      }
+      else{
+        numasdf = (parseInt(arr[0], 10) * 60) + arr[1];
+      }
+      return(
+      <Line style={{
+        top: numasdf,
+        }}/>
+      );
     }
 
     
 
-    useEffect(()=> {
+    
+
+    useEffect(async ()=> {
         initializeCalendar();
-        retrieveData();
-        formatData();  
-    }) 
+        await retrieveData();
+        setTimeout(() => formatData(), 250)
+        if(Object.keys(items).length === 0){
+          setRefresh(!refresh)
+        }
+    }, [refresh]) 
 
     return(
         <SafeAreaView style={{
@@ -193,27 +259,27 @@ const TrendingScreen = () => {
               // Specify how each date should be rendered. day can be undefined if the item is not first in that day
               renderDay={(day, item) => {
                 return(
+                  
                   <View style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    height: 1000,
+                    height: 1600,
                     width: width,
                     backgroundColor: white
                   }}>
+                    
                     <View style={{
                       display: 'flex',
-                      height: 1000,
+                      height: 1600,
                       width: 100,
                       backgroundColor: primary,
                     }}>
-                      
+                      <CurrentTimeComponent/>
                     </View>
                     <View style={{
                       display: 'flex',
-                      height: 1000,
+                      height: 1600,
                       width: width - 100,
-                      justifyContent: 'center',
-                      alignItems: 'center',
                       backgroundColor: primary,
                     }}>
                       <Text style={{
@@ -221,14 +287,41 @@ const TrendingScreen = () => {
                       }}>
                       {item.name ? item.name : Hello}
                       </Text>
+                      <RedLineComponent/>
                     </View>
                   </View>
                 );
-                
               }}
               // Specify how empty date content with no items should be rendered
               renderEmptyDate={() => {
-                return <View />;
+                return(
+                  
+                    <View style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      height: 1600,
+                      width: width,
+                      backgroundColor: white
+                    }}>
+                      
+                      <View style={{
+                        display: 'flex',
+                        height: 1600,
+                        width: 100,
+                        backgroundColor: primary,
+                      }}>
+                        <CurrentTimeComponent/>
+                      </View>
+                      <View style={{
+                        display: 'flex',
+                        height: 1600,
+                        width: width - 100,
+                        backgroundColor: primary,
+                      }}>
+                        <RedLineComponent/>
+                      </View>
+                    </View>
+                );
               }}
               // Specify how agenda knob should look like
               // Specify what should be rendered instead of ActivityIndicator
@@ -272,8 +365,11 @@ const TrendingScreen = () => {
         </CalendarContainer>
       </SafeAreaView>
     
+
+
+
     );
 
-}
 
+}
 export default TrendingScreen;
