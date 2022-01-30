@@ -153,32 +153,25 @@ const TrendingScreen = () => {
 
     const CurrentTimeComponent = () => {
       const {currentDateObject, setCurrentDateObject} = useContext(CurrentDateContext);
+      
+      const currentHours = currentDateObject.getHours();
       const currentTime = currentDateObject.toLocaleTimeString();
-      const arr = currentTime.split(" ")[0].split(":");
-      const amOrPM = currentTime.split(" ")[1];
+      const currentMinutes = currentDateObject.getMinutes();
+      const pixels = (currentHours * 60) + currentMinutes;
       const arr2 = currentTime.split(" ");
       const timeWithoutSecs = `${arr2[0].split(":")[0]}:${arr2[0].split(":")[1]} ${arr2[1]}`;
-      let numasdf;
-      if(amOrPM === 'AM' && arr[0] === "12"){
-        numasdf = parseInt(arr[1], 10) * 60;
-      }
-      else if(amOrPM === 'PM' && arr[0] === '12'){
-        numasdf = (parseInt(arr[0], 10) * 60) + parseInt(arr[1], 10);
-      }
-      else if(amOrPM === 'PM'){
-          numasdf = ((parseInt(arr[0], 10) + 12) * 60) + (parseInt(arr[1], 10));
-      }
-      else{
-        numasdf = (parseInt(arr[0], 10) * 60) + arr[1];
-      }
+      
       return(
-
+        <View style={{
+          position: 'absolute',
+        }}>
           <Text style={{
-            top: numasdf,
-            color: white,
+            top: pixels,
+            color: brand,
           }}>
             {timeWithoutSecs}
           </Text>
+          </View>
       );
     }
     
@@ -186,29 +179,53 @@ const TrendingScreen = () => {
     const RedLineComponent = () => {
       const {currentDateObject, setCurrentDateObject} = useContext(CurrentDateContext);
       
-      const currentTime = currentDateObject.toLocaleTimeString();
-      const arr = currentTime.split(" ")[0].split(":");
-      const amOrPM = currentTime.split(" ")[1];
-      let numasdf;
-      if(amOrPM === 'AM' && arr[0] === "12"){
-        numasdf = parseInt(arr[1], 10) * 60;
-      }
-      else if(amOrPM === 'PM' && arr[0] === '12'){
-        numasdf = (parseInt(arr[0], 10) * 60) + parseInt(arr[1], 10);
-      }
-      else if(amOrPM === 'PM'){
-          numasdf = ((parseInt(arr[0], 10) + 12) * 60) + (parseInt(arr[1], 10));
-      }
-      else{
-        numasdf = (parseInt(arr[0], 10) * 60) + arr[1];
-      }
+      const currentHours = currentDateObject.getHours();
+      const currentMinutes = currentDateObject.getMinutes();
+      const pixels = (currentHours * 60) + currentMinutes;
+      console.log(pixels);
       return(
       <Line style={{
-        top: numasdf,
+        position: 'absolute',
+        top: pixels,
+        backgroundColor: brand,
         }}/>
       );
     }
 
+    const TimeLineComponent = ({hour}) => {
+      console.log(hour * 60);
+      return(
+        <Line style={{
+          position: 'absolute',
+          top: hour * 60,
+        }}/> 
+      );
+    }
+
+    const TimeTextComponent = ({hour}) => {
+      let hourasdf;
+      if(hour === 0){
+        hourasdf = `${12}:00 AM`;
+      }
+      else if (hour > 12){
+        hourasdf = `${(hour - 12).toString()}:00 PM`;
+      }
+      else{
+        hourasdf = `${hour}:00 AM`
+      }
+      return(
+        <View style={{
+          position: 'absolute',
+          top: hour * 60,
+        }}>
+        <Text style={{
+          color: white,
+        }}>
+          {hourasdf}
+        </Text>
+        </View>
+      )
+    }
     
 
     
@@ -263,30 +280,73 @@ const TrendingScreen = () => {
                   <View style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    height: 1600,
+                    height: 2000,
                     width: width,
                     backgroundColor: white
                   }}>
                     
                     <View style={{
                       display: 'flex',
-                      height: 1600,
-                      width: 100,
+                      height: 2000,
+                      width: 75,
                       backgroundColor: primary,
                     }}>
+                      <TimeTextComponent hour={0} />
+                      <TimeTextComponent hour={1} />
+                      <TimeTextComponent hour={2} />
+                      <TimeTextComponent hour={3} />
+                      <TimeTextComponent hour={4} />
+                      <TimeTextComponent hour={5} />
+                      <TimeTextComponent hour={6} />
+                      <TimeTextComponent hour={7} />
+                      <TimeTextComponent hour={8} />
+                      <TimeTextComponent hour={9} />
+                      <TimeTextComponent hour={10} />
+                      <TimeTextComponent hour={11} />
+                      <TimeTextComponent hour={12} />
+                      <TimeTextComponent hour={13} />
+                      <TimeTextComponent hour={14} />
+                      <TimeTextComponent hour={15} />
+                      <TimeTextComponent hour={16} />
+                      <TimeTextComponent hour={17} />
+                      <TimeTextComponent hour={18} />
+                      <TimeTextComponent hour={19} />
+                      <TimeTextComponent hour={20} />
+                      <TimeTextComponent hour={21} />
+                      <TimeTextComponent hour={22} />
+                      <TimeTextComponent hour={23} />
                       <CurrentTimeComponent/>
                     </View>
                     <View style={{
                       display: 'flex',
-                      height: 1600,
-                      width: width - 100,
+                      height: 2000,
+                      width: width - 75,
                       backgroundColor: primary,
                     }}>
-                      <Text style={{
-                        color: white,
-                      }}>
-                      {item.name ? item.name : Hello}
-                      </Text>
+                      <TimeLineComponent hour={0} />
+                      <TimeLineComponent hour={1} />
+                      <TimeLineComponent hour={2} />
+                      <TimeLineComponent hour={3} />
+                      <TimeLineComponent hour={4} />
+                      <TimeLineComponent hour={5} />
+                      <TimeLineComponent hour={6} />
+                      <TimeLineComponent hour={7} />
+                      <TimeLineComponent hour={8} />
+                      <TimeLineComponent hour={9} />
+                      <TimeLineComponent hour={10} />
+                      <TimeLineComponent hour={11} />
+                      <TimeLineComponent hour={12} />
+                      <TimeLineComponent hour={13} />
+                      <TimeLineComponent hour={14} />
+                      <TimeLineComponent hour={15} />
+                      <TimeLineComponent hour={16} />
+                      <TimeLineComponent hour={17} />
+                      <TimeLineComponent hour={18} />
+                      <TimeLineComponent hour={19} />
+                      <TimeLineComponent hour={20} />
+                      <TimeLineComponent hour={21} />
+                      <TimeLineComponent hour={22} />
+                      <TimeLineComponent hour={23} />
                       <RedLineComponent/>
                     </View>
                   </View>
